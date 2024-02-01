@@ -16,8 +16,8 @@
 - `GET /api/v1/users/:id` : Mengambil pengguna dengan ID tertentu.
 - `PUT /api/v1/users/:id` : Memperbarui pengguna dengan ID tertentu. Body permintaan harus berisi name, email, dan password yang baru.
 
-- `DELETE` /api/v1/users/:id: Menghapus pengguna dengan ID tertentu.
+- `DELETE /api/v1/users/:id`: Menghapus pengguna dengan ID tertentu.
 
 ## NEWS
 
-- `GET` /api/v1/news: Mengambil semua berita.
+- `GET /api/v1/news` : Mengambil semua berita.
