@@ -13,7 +13,7 @@ dotenv.config({ path: "./config.env" });
 // Body Parser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(errorHandler);
+
 const DB = process.env.DATABASE.replace(
   "<PASSWORD>",
   process.env.DATABASE_PASSWORD
@@ -29,8 +29,22 @@ mongoose
   .catch((err) => console.error(err));
 
 // Routes
+
 app.use("/api/v1/news", newsRouter);
 app.use("/api/v1/users", usersRouter);
+app.all("*", (req, res, next) => {
+  // res.status(404).json({
+  //   status: "fail",
+  //   message: `Can't find ${req.originalUrl} on this server!`,
+  // });
+
+  const error = new Error(`Can't find ${req.originalUrl} on this server!`);
+  error.status = "fail";
+  err.statusCode = 404;
+
+  next(error);
+});
+app.use(errorHandler);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
