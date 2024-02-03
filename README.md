@@ -21,3 +21,4 @@
 ## NEWS
 
 - `GET /api/v1/news` : Mengambil semua berita.
+- `GET /api/v1/news/filter?search={query}` : Search Query.
