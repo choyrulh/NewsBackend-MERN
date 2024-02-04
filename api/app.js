@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const express = require("express");
+const cors = require("cors");
 
 const newsRouter = require("./routes/newsRoutes.js");
 const usersRouter = require("./routes/userRoutes.js");
@@ -13,6 +14,8 @@ dotenv.config({ path: "./config.env" });
 // Body Parser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cors());
 
 const DB = process.env.DATABASE.replace(
   "<PASSWORD>",

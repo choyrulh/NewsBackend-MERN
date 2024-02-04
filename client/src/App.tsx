@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { convertToIndonesiaTimezone } from "./utils/time";
+import { newsType } from "./type/newsType";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [news, setNews] = useState([]);
 
+  async function fetchData() {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/news");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const { news } = data.data;
+      setNews(news);
+    } catch (error) {
+      console.log("Fetch error: ", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log(news);
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>Hello</h1>
+      <div className="bg-white font-[sans-serif] my-4">
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold text-[#333] inline-block relative after:absolute after:w-4/6 after:h-1 after:left-0 after:right-0 after:-bottom-4 after:mx-auto after:bg-pink-400 after:rounded-full">
+            News
+          </h2>
+        </div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-md:max-w-lg mx-auto ">
+          {news?.map((d: newsType) => (
+            <div
+              key={d._id}
+              className="bg-white cursor-pointer rounded overflow-hidden shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative top-0 hover:-top-2 transition-all duration-300"
+            >
+              <img
+                src={d.header_image}
+                alt={d.title}
+                className="w-full h-60 object-cover"
+              />
+              <div className="p-6">
+                <span className="text-sm block text-gray-400 mb-2">
+                  {convertToIndonesiaTimezone(d.published_at)} | BY {d.author}
+                </span>
+                <h3 className="text-xl font-bold text-[#333]">{d.title}</h3>
+                <hr className="my-6" />
+                <p className="text-gray-400 text-sm">
+                  {d.description.slice(0, 100)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

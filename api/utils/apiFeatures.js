@@ -18,12 +18,17 @@ class APIFeatures {
   search() {
     if (this.queryString.search) {
       const search = this.queryString.search;
+      // using regex
       this.query = this.query.find({
-        $or: [
-          { title: { $regex: search, $options: "i" } },
-          { description: { $regex: search, $options: "i" } },
-        ],
+        $or: [{ title: { $regex: search, $options: "i" } }],
       });
+
+      // using index of string
+      // this.query = this.query.find({
+      //   $text: { $search: search },
+      // });
+
+      this.query = this.query.sort("-published_at");
     }
     return this;
   }
@@ -51,7 +56,7 @@ class APIFeatures {
       const sortBy = this.queryString.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
     } else {
-      this.query = this.query.sort("-createdAt");
+      this.query = this.query.sort("-published_at");
     }
     return this;
   }
