@@ -16,7 +16,7 @@ class APIFeatures {
   }
 
   search() {
-    if (this.queryString.search) {
+    if (this.queryString.search && this.queryString.search.trim() !== "") {
       const search = this.queryString.search;
       // using regex
       this.query = this.query.find({
@@ -33,6 +33,19 @@ class APIFeatures {
     return this;
   }
 
+  // search() {
+  //   if (this.queryString.search && this.queryString.search.trim() !== "") {
+  //     const search = this.queryString.search;
+  //     // using regex
+  //     this.query = this.query.find({
+  //       $or: [{ title: { $regex: search, $options: "i" } }],
+  //     });
+  //     this.query = this.query.sort("-published_at");
+  //   } else {
+  //     this.query = this.query.find({ title: "No Result" }); // tambahkan ini
+  //   }
+  //   return this;
+  // }
   limitFields() {
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(",").join(" ");

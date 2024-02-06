@@ -27,7 +27,11 @@ exports.aliasNews = (req, res, next) => {
     "," +
     "short_description" +
     "," +
-    "header_image";
+    "header_image" +
+    "," +
+    "published_at" +
+    "," +
+    "author";
 
   next();
 };
@@ -56,7 +60,7 @@ exports.getAllNews = async (req, res) => {
     //   data: { news },
     // });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ status: "fail", message: err.message });
   }
 };
 

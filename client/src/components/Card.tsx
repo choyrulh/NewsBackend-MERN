@@ -17,6 +17,11 @@ export const Card: React.FC<NewsListProps> = ({
         News
       </h2>
     </div>
+    {news?.length === 0 && (
+      <div className="mt-10 text-center items-center justify-center text-gray-500">
+        Not found item
+      </div>
+    )}
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-md:max-w-lg mx-auto ">
       {news?.map((d: newsType) => (
         <Link to={`/news/${d._id}`} key={d._id}>
@@ -33,7 +38,7 @@ export const Card: React.FC<NewsListProps> = ({
               <h3 className="text-xl font-bold text-[#333]">{d.title}</h3>
               <hr className="my-6" />
               <p className="text-gray-400 text-sm">
-                {d.description.slice(0, 100) ||
+                {d.description?.slice(0, 100) ||
                   d.short_description?.slice(0, 100)}
               </p>
             </div>

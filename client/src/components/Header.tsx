@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 interface navbar {
   title: string;
@@ -7,7 +7,12 @@ interface navbar {
 }
 
 const Header = () => {
+  const location = useLocation();
   const [isMenuCollapsed, setMenuCollapsed] = useState<boolean>(false);
+
+  if (location.pathname === "/login" || location.pathname === "/register") {
+    return null;
+  }
 
   const handleClick = () => {
     setMenuCollapsed(!isMenuCollapsed);
@@ -45,12 +50,12 @@ const Header = () => {
         </a>
         <div className="flex items-center ml-auto lg:order-1">
           <button className="mr-6 font-semibold text-[15px] border-none outline-none">
-            <a href="/login" className="text-[#007bff] hover:underline">
+            <Link to="/login" className="text-[#007bff] hover:underline">
               Login
-            </a>
+            </Link>
           </button>
           <button className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
-            Sign up
+            <Link to="/register">Register</Link>
           </button>
           <button id="toggle" className="lg:hidden ml-7">
             <svg
@@ -78,11 +83,12 @@ const Header = () => {
             <NavLink
               to={i.link}
               key={i.title}
-              className="max-lg:border-b max-lg:bg-[#007bff] max-lg:py-2 px-3 max-lg:rounded"
+              className={({ isActive }) =>
+                isActive ? "text-red-500 navText" : "navText"
+              }
+              end
             >
-              <li className="lg:hover:text-[#007bff] text-[#333] block font-semibold text-[15px]">
-                {i.title}
-              </li>
+              {i.title}
             </NavLink>
           ))}
         </ul>

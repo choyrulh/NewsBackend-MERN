@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchDetailNews } from "../service/newsApi";
 import { convertToIndonesiaTimezone } from "../utils/time";
+import DetailSkeleteon from "../components/DetailSkeleteon";
 
 type ParamsType = {
   id: string;
@@ -16,11 +17,11 @@ function DetailNews() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <DetailSkeleteon />;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <p>error</p>;
   }
 
   console.log(data);

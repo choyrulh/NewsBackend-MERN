@@ -10,6 +10,10 @@ const newsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    published_at: {
+      type: Date,
+      default: Date.now(),
+    },
     author: {
       type: String,
       required: true,
@@ -33,14 +37,6 @@ const newsSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
-    },
-    created_at: {
-      type: Date,
-      default: Date.now(),
-    },
-    updated_at: {
-      type: Date,
-      default: Date.now(),
     },
   },
   { collection: "berita" }

@@ -4,9 +4,7 @@ const newsController = require("../controllers/newsController");
 
 const router = express.Router();
 
-router
-  .route("/filter")
-  .get(newsController.aliasNews, newsController.getAllNews);
+router.route("/query").get(newsController.aliasNews, newsController.getAllNews);
 
 router
   .route("/")

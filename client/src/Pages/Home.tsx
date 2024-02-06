@@ -1,11 +1,5 @@
-import News from "../components/News";
-
 function Home() {
-  return (
-    <>
-      <News />
-    </>
-  );
+  return <>home</>;
 }
 
 export default Home;

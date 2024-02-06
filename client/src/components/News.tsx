@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { newsType } from "./../type/newsType";
 import { convertToIndonesiaTimezone } from "./../utils/time";
 import { fetchNews } from "../service/newsApi";
 import SkeleteonCard from "./SkeleteonCard";

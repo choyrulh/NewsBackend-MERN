@@ -7,6 +7,8 @@ import News from "./Pages/News";
 import Contact from "./Pages/Contact";
 import DetailNews from "./Pages/DetailNews";
 import NotFound from "./Pages/NotFound";
+import Login from "./Pages/Login.tsx";
+import Register from "./Pages/Register.tsx";
 function App() {
   const queryClient = new QueryClient();
 
@@ -16,26 +18,13 @@ function App() {
       errorElement: <NotFound />,
       element: <RootLayout />,
       children: [
-        {
-          path: "/",
-          element: <Home />,
-        },
-        {
-          path: "/about",
-          element: <About />,
-        },
-        {
-          path: "/news",
-          element: <News />,
-        },
-        {
-          path: "/contact",
-          element: <Contact />,
-        },
-        {
-          path: "/news/:id",
-          element: <DetailNews />,
-        },
+        { path: "/", element: <Home /> },
+        { path: "/about", element: <About /> },
+        { path: "/news", element: <News /> },
+        { path: "/news/:id", element: <DetailNews /> },
+        { path: "/contact", element: <Contact /> },
+        { path: "/login", element: <Login /> },
+        { path: "/register", element: <Register /> },
       ],
     },
   ]);

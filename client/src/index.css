@@ -5,9 +5,9 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  color-scheme: light dark;
+  color-scheme: light;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,9 +15,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: light dark) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #242424;
+  }
+}
+
+@layer components {
+  .navText {
+    @apply lg:hover:text-[#007bff] text-[#333] block font-semibold text-[15px] max-lg:border-b max-lg:bg-[#007bff] max-lg:py-2 px-3 max-lg:rounded;
   }
 }
