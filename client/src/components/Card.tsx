@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { newsType } from "../type/newsType";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,7 @@ type NewsListProps = {
   convertToIndonesiaTimezone: (date: string) => string;
 };
 
-export const Card: React.FC<NewsListProps> = ({
+const Card: React.FC<NewsListProps> = ({
   news,
   convertToIndonesiaTimezone,
 }) => (
@@ -48,3 +48,5 @@ export const Card: React.FC<NewsListProps> = ({
     </div>
   </div>
 );
+
+export default memo(Card);

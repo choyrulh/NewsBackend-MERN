@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchNews, fetchNewsByQuery } from "../service/newsApi";
 import { useEffect, useState } from "react";
-import { Card } from "../components/Card";
+import Card from "../components/Card";
 import { convertToIndonesiaTimezone } from "../utils/time";
 
 import SkeletonCard from "../components/SkeletonCard";
@@ -20,7 +20,7 @@ function News() {
       setDebounceSearchTerm(searchTerm);
     }, 500);
     return () => clearTimeout(timerId);
-  }, [searchTerm]);
+  }, []);
 
   const { data: searchData, isLoading: searchLoading } = useQuery({
     queryKey: ["news", debounceSearchTerm],
