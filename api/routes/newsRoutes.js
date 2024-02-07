@@ -26,13 +26,13 @@ router.route("/keywords").get(newsController.getAllNews);
 router.route("/all/author").get(newsController.getAllAuthor);
 
 // GET ALL KEYWORDS
-router.route("/all/keywords").get(newsController.getAllKeywords);
+router.route("/all/tag").get(newsController.getAllTag);
 
 // FILTER NEWS
 router
   .route("/filter/author")
   .get(newsController.aliasNews, newsController.getAllNewsAuthor);
 router
-  .route("/filter/keywords")
-  .get(newsController.aliasNews, newsController.getAllNewsKeywords);
+  .route("/filter/tag")
+  .get(newsController.aliasNews, newsController.getAllNewsTag);
 module.exports = router;

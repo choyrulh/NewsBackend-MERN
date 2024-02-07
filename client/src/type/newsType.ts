@@ -1,21 +1,24 @@
 export interface newsType {
   _id: string;
   title: string;
-  description: string;
+  article_text: string;
   created_at: string;
-  header_image: string;
-  published_at: string;
+  main_image: string;
+  publish_date: string;
   author: string;
-  short_description?: string;
+  tag: string[];
+  // short_description?: string;
 }
 
 export interface detailNewsType {
   _id: string;
   title: string;
-  keywords: string[];
-  description: string;
-  header_image: string;
-  scraped_at: string;
+  article_text: string;
+  created_at: string;
+  main_image: string;
+  publish_date: string;
   author: string;
-  publisher: string;
+  tag: string[];
+  // scraped_at: string;
+  // publisher: string;
 }

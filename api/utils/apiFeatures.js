@@ -23,7 +23,7 @@ class APIFeatures {
         $or: [{ title: { $regex: search, $options: "i" } }],
       });
 
-      this.query = this.query.sort("-published_at");
+      this.query = this.query.sort("-publish_date");
     }
     return this;
   }
@@ -35,19 +35,19 @@ class APIFeatures {
         $or: [{ author: { $regex: search, $options: "i" } }],
       });
 
-      this.query = this.query.sort("-published_at");
+      this.query = this.query.sort("-publish_date");
     }
     return this;
   }
-  searchKeywords() {
+  searchTag() {
     if (this.queryString.search && this.queryString.search.trim() !== "") {
       const search = this.queryString.search;
       // using regex
       this.query = this.query.find({
-        $or: [{ keywords: { $regex: search, $options: "i" } }],
+        $or: [{ tag: { $regex: search, $options: "i" } }],
       });
 
-      this.query = this.query.sort("-published_at");
+      this.query = this.query.sort("-publish_date");
     }
     return this;
   }
@@ -59,7 +59,7 @@ class APIFeatures {
   //     this.query = this.query.find({
   //       $or: [{ title: { $regex: search, $options: "i" } }],
   //     });
-  //     this.query = this.query.sort("-published_at");
+  //     this.query = this.query.sort("-publish_date");
   //   } else {
   //     this.query = this.query.find({ title: "No Result" }); // tambahkan ini
   //   }
@@ -89,7 +89,7 @@ class APIFeatures {
       const sortBy = this.queryString.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
     } else {
-      this.query = this.query.sort("-published_at");
+      this.query = this.query.sort("-publish_date");
     }
     return this;
   }

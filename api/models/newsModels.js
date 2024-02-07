@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const newsSchema = new mongoose.Schema(
+const newsIndonesiaSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -10,7 +10,7 @@ const newsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    published_at: {
+    publish_date: {
       type: Date,
       default: Date.now(),
     },
@@ -18,23 +18,15 @@ const newsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    publisher: {
+    article_text: {
       type: String,
       required: true,
     },
-    short_description: {
-      type: String,
-      required: true,
-    },
-    keywords: {
+    tag: {
       type: [String],
       required: true,
     },
-    header_image: {
-      type: String,
-      required: true,
-    },
-    description: {
+    main_image: {
       type: String,
       required: true,
     },
@@ -42,6 +34,6 @@ const newsSchema = new mongoose.Schema(
   { collection: "berita" }
 );
 
-const News = mongoose.model("news", newsSchema);
+const NewsIndonesia = mongoose.model("newsIndonesia", newsIndonesiaSchema);
 
-module.exports = News;
+module.exports = NewsIndonesia;

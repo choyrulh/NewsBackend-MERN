@@ -1,19 +1,19 @@
 exports.aliasNews = (req, res, next) => {
   req.query.limit = "10";
   req.query.page = "1";
-  req.query.sort = "-created_at";
+  req.query.sort = "-publish_date";
   req.query.fields =
     "title" +
     "," +
-    "publisher" +
+    "author" +
     "," +
-    "short_description" +
+    "article_text" +
     "," +
-    "header_image" +
+    "main_image" +
     "," +
-    "published_at" +
+    "publish_date" +
     "," +
-    "author";
+    "tag";
 
   next();
 };

@@ -26,7 +26,7 @@ mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbName: "news", // specify the database name
+    dbName: "indonesia", // specify the database name
   })
   .then(() => console.log("DB connection successful!"))
   .catch((err) => console.error(err));

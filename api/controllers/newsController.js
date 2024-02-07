@@ -1,4 +1,4 @@
-const News = require("../models/newsModels");
+const NewsIndonesia = require("../models/newsModels");
 const { APIFeatures } = require("../utils/apiFeatures");
 
 exports.checkBody = (req, res, next) => {
@@ -6,9 +6,8 @@ exports.checkBody = (req, res, next) => {
     !req.body.title ||
     !req.body.url ||
     !req.body.author ||
-    !req.body.publisher ||
-    !req.body.short_description ||
-    !req.body.keywords
+    !req.body.article_text ||
+    !req.body.tag
   ) {
     res.status(400).send();
   } else {
@@ -19,21 +18,23 @@ exports.checkBody = (req, res, next) => {
 exports.aliasNews = (req, res, next) => {
   req.query.limit = "10";
   req.query.page = "1";
-  req.query.sort = "-created_at";
+  req.query.sort = "-publish_date";
   req.query.fields =
     "title" +
     "," +
-    "publisher" +
+    "url" +
     "," +
-    "short_description" +
+    "article_text" +
+    "," +
+    "main_image" +
     "," +
     "header_image" +
     "," +
-    "published_at" +
+    "publish_date" +
     "," +
     "author" +
     "," +
-    "keywords";
+    "tag";
 
   next();
 };
@@ -42,7 +43,7 @@ exports.getAllNews = async (req, res) => {
   try {
     // EXECUTE QUERY
 
-    const features = new APIFeatures(News.find(), req.query)
+    const features = new APIFeatures(NewsIndonesia.find(), req.query)
       .filter()
       .search()
       .limitFields()
@@ -71,7 +72,7 @@ exports.getAllNewsAuthor = async (req, res) => {
   try {
     // EXECUTE QUERY
 
-    const features = new APIFeatures(News.find(), req.query)
+    const features = new APIFeatures(NewsIndonesia.find(), req.query)
       .filter()
       .searchAuthor()
       .limitFields()
@@ -89,13 +90,13 @@ exports.getAllNewsAuthor = async (req, res) => {
     res.status(500).json({ status: "fail", message: err.message });
   }
 };
-exports.getAllNewsKeywords = async (req, res) => {
+exports.getAllNewsTag = async (req, res) => {
   try {
     // EXECUTE QUERY
 
-    const features = new APIFeatures(News.find(), req.query)
+    const features = new APIFeatures(NewsIndonesia.find(), req.query)
       .filter()
-      .searchKeywords()
+      .searchTag()
       .limitFields()
       .paginate()
       .sort();
@@ -121,7 +122,7 @@ exports.getAllNewsKeywords = async (req, res) => {
 
 exports.getNews = async (req, res) => {
   try {
-    const news = await News.findById(req.params.id);
+    const news = await NewsIndonesia.findById(req.params.id);
     res.status(200).json(news);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -133,24 +134,20 @@ exports.createNews = async (req, res) => {
     title,
     url,
     author,
-    publisher,
-    short_description,
-    keywords,
+    article_text,
+    tag,
     header_image,
-    description,
     created_at,
     updated_at,
   } = req.body;
 
-  const news = await News.create({
+  const news = await NewsIndonesia.create({
     title: title,
     url: url,
     author: author,
-    publisher: publisher,
-    short_description: short_description,
-    keywords: keywords,
+    article_text: article_text,
+    tag: tag,
     header_image: header_image,
-    description: description,
     created_at: created_at,
     updated_at: updated_at,
   });
@@ -161,23 +158,23 @@ exports.createNews = async (req, res) => {
 };
 
 exports.deleteNews = async (req, res) => {
-  const news = await News.findByIdAndDelete(req.params.id);
+  const news = await NewsIndonesia.findByIdAndDelete(req.params.id);
   res.status(200).json({ status: "success", data: null });
 };
 
 exports.updateNews = async (req, res) => {
-  const news = await News.findByIdAndUpdate(req.params.id, req.body, {
+  const news = await NewsIndonesia.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
   res.status(200).json({ status: "success", data: { news } });
 };
 
 exports.getAllAuthor = async (req, res) => {
-  const author = await News.distinct("author");
+  const author = await NewsIndonesia.distinct("author");
   res.status(200).json({ status: "success", author });
 };
 
-exports.getAllKeywords = async (req, res) => {
-  const keywords = await News.distinct("keywords");
-  res.status(200).json({ status: "success", keywords });
+exports.getAllTag = async (req, res) => {
+  const tag = await NewsIndonesia.distinct("tag");
+  res.status(200).json({ status: "success", tag });
 };

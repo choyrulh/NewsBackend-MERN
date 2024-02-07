@@ -20,16 +20,16 @@ function News() {
       setDebounceSearchTerm(searchTerm);
     }, 500);
     return () => clearTimeout(timerId);
-  }, []);
+  }, [searchTerm]);
 
   const { data: searchData, isLoading: searchLoading } = useQuery({
-    queryKey: ["news", debounceSearchTerm],
+    queryKey: ["newsIndonesia", debounceSearchTerm],
     queryFn: () => fetchNewsByQuery(debounceSearchTerm || ""),
     enabled: !!debounceSearchTerm,
     staleTime: Infinity,
   });
   const { data: newsData, isLoading: newsLoading } = useQuery({
-    queryKey: ["news"],
+    queryKey: ["newsIndonesia"],
     queryFn: fetchNews,
     staleTime: Infinity,
   });
