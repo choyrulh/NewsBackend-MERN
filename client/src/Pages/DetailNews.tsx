@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchDetailNews } from "../service/newsApi";
 import { convertToIndonesiaTimezone } from "../utils/time";
-import DetailSkeleteon from "../components/DetailSkeleteon";
+import DetailSkeleton from "../components/DetailSkeleton";
 
 type ParamsType = {
-  id: string;
+  id: string | undefined;
 };
 
 function DetailNews() {
@@ -13,18 +13,24 @@ function DetailNews() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["detailNews"],
-    queryFn: () => fetchDetailNews(params.id),
+    queryFn: () => {
+      // Menangani kasus jika params.id undefined
+      if (params.id) {
+        return fetchDetailNews(params.id);
+      } else {
+        // Mengembalikan data default atau menangani kasus lainnya
+        return null; /* sesuatu yang sesuai dengan kebutuhan Anda */
+      }
+    },
   });
 
   if (isLoading) {
-    return <DetailSkeleteon />;
+    return <DetailSkeleton />;
   }
 
   if (error) {
     return <p>error</p>;
   }
-
-  console.log(data);
 
   return (
     <div className="bg-white font-[sans-serif] my-4 p-6 rounded shadow-lg">

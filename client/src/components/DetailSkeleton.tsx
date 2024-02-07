@@ -1,6 +1,4 @@
-import React from "react";
-
-function DetailSkeleteon() {
+function DetailSkeleton() {
   return (
     <div className="bg-white font-[sans-serif] my-4 p-6 rounded shadow-lg">
       <div className="w-full h-96 bg-gray-300 rounded mb-6 animate-pulse"></div>
@@ -13,4 +11,4 @@ function DetailSkeleteon() {
   );
 }
 
-export default DetailSkeleteon;
+export default DetailSkeleton;
