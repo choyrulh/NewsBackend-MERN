@@ -31,16 +31,71 @@ exports.aliasNews = (req, res, next) => {
     "," +
     "published_at" +
     "," +
-    "author";
+    "author" +
+    "," +
+    "keywords";
 
   next();
 };
 
 exports.getAllNews = async (req, res) => {
   try {
+    // EXECUTE QUERY
+
     const features = new APIFeatures(News.find(), req.query)
       .filter()
       .search()
+      .limitFields()
+      .paginate()
+      .sort();
+
+    const news = await features.query;
+
+    res.status(200).json({
+      status: "success",
+      results: news.length,
+      data: { news },
+    });
+
+    // const news = await News.find();
+    // res.status(200).json({
+    //   status: "success",
+    //   results: news.length,
+    //   data: { news },
+    // });
+  } catch (err) {
+    res.status(500).json({ status: "fail", message: err.message });
+  }
+};
+exports.getAllNewsAuthor = async (req, res) => {
+  try {
+    // EXECUTE QUERY
+
+    const features = new APIFeatures(News.find(), req.query)
+      .filter()
+      .searchAuthor()
+      .limitFields()
+      .paginate()
+      .sort();
+
+    const news = await features.query;
+
+    res.status(200).json({
+      status: "success",
+      results: news.length,
+      data: { news },
+    });
+  } catch (err) {
+    res.status(500).json({ status: "fail", message: err.message });
+  }
+};
+exports.getAllNewsKeywords = async (req, res) => {
+  try {
+    // EXECUTE QUERY
+
+    const features = new APIFeatures(News.find(), req.query)
+      .filter()
+      .searchKeywords()
       .limitFields()
       .paginate()
       .sort();
@@ -115,4 +170,14 @@ exports.updateNews = async (req, res) => {
     new: true,
   });
   res.status(200).json({ status: "success", data: { news } });
+};
+
+exports.getAllAuthor = async (req, res) => {
+  const author = await News.distinct("author");
+  res.status(200).json({ status: "success", author });
+};
+
+exports.getAllKeywords = async (req, res) => {
+  const keywords = await News.distinct("keywords");
+  res.status(200).json({ status: "success", keywords });
 };

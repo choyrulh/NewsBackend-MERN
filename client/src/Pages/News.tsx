@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card } from "../components/Card";
 import { convertToIndonesiaTimezone } from "../utils/time";
 
-import SkeleteonCard from "../components/SkeleteonCard";
+import SkeletonCard from "../components/SkeletonCard";
 
 function News() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,7 +35,7 @@ function News() {
   });
 
   if (searchLoading || newsLoading) {
-    return <SkeleteonCard />;
+    return <SkeletonCard />;
   }
 
   const resultsQuery = debounceSearchTerm

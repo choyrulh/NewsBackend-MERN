@@ -23,10 +23,29 @@ class APIFeatures {
         $or: [{ title: { $regex: search, $options: "i" } }],
       });
 
-      // using index of string
-      // this.query = this.query.find({
-      //   $text: { $search: search },
-      // });
+      this.query = this.query.sort("-published_at");
+    }
+    return this;
+  }
+  searchAuthor() {
+    if (this.queryString.search && this.queryString.search.trim() !== "") {
+      const search = this.queryString.search;
+      // using regex
+      this.query = this.query.find({
+        $or: [{ author: { $regex: search, $options: "i" } }],
+      });
+
+      this.query = this.query.sort("-published_at");
+    }
+    return this;
+  }
+  searchKeywords() {
+    if (this.queryString.search && this.queryString.search.trim() !== "") {
+      const search = this.queryString.search;
+      // using regex
+      this.query = this.query.find({
+        $or: [{ keywords: { $regex: search, $options: "i" } }],
+      });
 
       this.query = this.query.sort("-published_at");
     }

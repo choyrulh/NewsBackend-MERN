@@ -1,4 +1,4 @@
-const SkeleteonCard = () => {
+const SkeletonCard = () => {
   return (
     <>
       <div className="bg-white font-[sans-serif] my-4">
@@ -36,4 +36,4 @@ const SkeleteonCard = () => {
   );
 };
 
-export default SkeleteonCard;
+export default SkeletonCard;
