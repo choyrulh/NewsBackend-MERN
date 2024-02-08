@@ -1,28 +1,51 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { fetchNewsByQuery } from "../service/newsApi";
-import Card from "../components/Card";
+import Card from "../elements/Card";
 import { convertToIndonesiaTimezone } from "../utils/time";
 import useDebounce from "../hooks/useDebounce";
+import {
+  useGetAllNewsQuery,
+  useGetNewsByPageQuery,
+  useGetNewsByQueryQuery,
+} from "../store/features/NewsAPI/api";
+import Container from "../fragment/Container";
+import SkeletonCard from "../components/SkeletonCard";
+import { useParams } from "react-router-dom";
+import NavPagination from "../components/NavPagination";
 
 function Home() {
+  const { id } = useParams();
   const [search, setSearch] = useState("");
   const debounceSearchTerm = useDebounce(search, 500);
+  const { data: dataAll, isLoading: isLoadingAll } = useGetAllNewsQuery("");
+  const { data: dataQuery, isLoading: isLoadingQuery } =
+    useGetNewsByQueryQuery(debounceSearchTerm);
+  const { data: dataPagination } = useGetNewsByPageQuery(id);
+
+  console.log("ini data pagination", dataPagination);
+
+  const currentPage = id ? Math.max(2, parseInt(id)) : 1;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const { data } = useQuery({
-    queryKey: ["newsIndonesia", debounceSearchTerm],
-    queryFn: () => fetchNewsByQuery(debounceSearchTerm || ""),
-    enabled: !!debounceSearchTerm,
-    staleTime: Infinity,
-  });
+  const newsQuery = dataQuery?.data.news;
+  const newsAll = dataAll?.data.news;
 
-  const news = data?.data.news;
+  let news;
 
-  console.log(news);
+  if (search.length > 2) {
+    news = newsQuery;
+  } else if (id) {
+    news = dataPagination?.data.news;
+  } else {
+    news = newsAll;
+  }
+
+  if (isLoadingAll === true || isLoadingQuery === true) {
+    return <SkeletonCard />;
+  }
+
   return (
     <>
       <input
@@ -31,10 +54,17 @@ function Home() {
         onChange={handleChange}
         value={search}
       />
-      <Card
-        news={news}
-        convertToIndonesiaTimezone={convertToIndonesiaTimezone}
+      <NavPagination
+        onClickPrev={() => {}}
+        onClickNext={() => {}}
+        currentPage={currentPage}
       />
+      <Container>
+        <Card
+          news={news}
+          convertToIndonesiaTimezone={convertToIndonesiaTimezone}
+        />
+      </Container>
     </>
   );
 }

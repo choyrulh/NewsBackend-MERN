@@ -20,18 +20,16 @@ function useResultsFetch() {
 
   const newsQuery = data?.data.news;
 
-  console.log(newsQuery);
-
   const { data: newsData, isLoading: newsLoading } = useQuery({
     queryKey: ["newsIndonesia"],
     queryFn: fetchNews,
     staleTime: Infinity,
   });
 
-  console.log(newsData?.news);
-  const news = newsQuery || newsData?.news;
+  const allNews = newsData?.news;
   return {
-    news,
+    newsQuery,
+    allNews,
     handleChange,
     search,
     newsLoading,

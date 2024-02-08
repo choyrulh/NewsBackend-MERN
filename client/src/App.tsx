@@ -19,6 +19,7 @@ function App() {
       element: <RootLayout />,
       children: [
         { path: "/", element: <Home /> },
+        { path: "/page/:id", element: <Home /> },
         { path: "/about", element: <About /> },
         { path: "/news", element: <News /> },
         { path: "/news/:id", element: <DetailNews /> },

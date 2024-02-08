@@ -16,3 +16,10 @@ export const fetchNewsByQuery = async (query: string) => {
   );
   return data;
 };
+
+export const fetchNewsPagination = async (page: string) => {
+  const { data } = await axios.get(
+    `http://localhost:3000/api/v1/news?page=${page}&limit=20`
+  );
+  return data;
+};
