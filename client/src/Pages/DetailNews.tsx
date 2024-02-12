@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchDetailNews } from "../service/newsApi";
 import { convertToIndonesiaTimezone } from "../utils/time";
-import DetailSkeleton from "../components/DetailSkeleton";
 
 type ParamsType = {
   id: string | undefined;
@@ -14,37 +13,58 @@ function DetailNews() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["detailNews"],
     queryFn: () => {
-      // Menangani kasus jika params.id undefined
+      // Handle cases where params.id is undefined
       if (params.id) {
         return fetchDetailNews(params.id);
       } else {
-        // Mengembalikan data default atau menangani kasus lainnya
-        return null; /* sesuatu yang sesuai dengan kebutuhan Anda */
+        // Return default data or handle the case as needed
+        return null; // Replace with something appropriate for your app
       }
     },
   });
 
   if (isLoading) {
-    return <DetailSkeleton />;
+    // Provide a loading indicator while data is fetching
+    return <div className="text-center mt-4">Loading...</div>;
   }
 
   if (error) {
-    return <p>error</p>;
+    // Display an error message if there's an error
+    return <div className="text-center mt-4">Error fetching news details.</div>;
   }
 
   return (
-    <div className="bg-white font-[sans-serif] my-4 p-6 rounded shadow-lg">
+    <div className="flex flex-col bg-gray-100 pt-16 pb-24 px-8 mx-auto max-w-screen-md gap-10">
+      {/* Image */}
       <img
         src={data.main_image}
         alt={data.title}
-        className="w-full h-96 object-cover rounded mb-6"
+        className="rounded-xl object-cover h-64 w-full"
       />
-      <h2 className="text-3xl font-extrabold text-[#333] mb-4">{data.title}</h2>
-      <span className="text-sm block text-gray-400 mb-6">
-        {convertToIndonesiaTimezone(data.publish_date)} | BY {data.author}
-      </span>
-      <p className="text-gray-800 text-sm leading-relaxed tracking-wide">
+
+      {/* Title and Information */}
+      <div className="flex flex-col gap-2">
+        <h2 className="text-3xl font-bold text-gray-800">{data.title}</h2>
+        <div className="flex items-center text-gray-500 text-sm">
+          <span className="mr-2">
+            {convertToIndonesiaTimezone(data.publish_date)}
+          </span>
+          <span>•</span>
+          <span className="ml-2">BY {data.author}</span>
+        </div>
+      </div>
+
+      {/* Article Text */}
+      <p className="text-gray-700 text-base leading-relaxed">
         {data.article_text}
+      </p>
+
+      {/* Tags */}
+      <p className="text-gray-500">
+        Tags:{" "}
+        {data.tag.map((tag) => {
+          return tag.replace(/['"]+/g, "");
+        })}
       </p>
     </div>
   );

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon api/app.js",
+    "dev": "nodemon api/server.js",
     "start": "node api/app.js",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,11 +18,13 @@
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "gitignore": "^0.7.0",
+    "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.44",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.1",
     "morgan": "^1.10.0",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "validator": "^13.11.0"
   }
 }

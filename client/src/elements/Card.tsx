@@ -27,7 +27,7 @@ const Card: React.FC<NewsListProps> = ({
           />
           <div className="p-6">
             <span className="text-sm block text-gray-400 mb-2">
-              {convertToIndonesiaTimezone(d.publish_date)} | BY {d.author}
+              {convertToIndonesiaTimezone(d.publish_date)} | oleh {d.author}
             </span>
             <h3 className="text-xl font-bold text-[#333]">{d.title}</h3>
             <hr className="my-6" />

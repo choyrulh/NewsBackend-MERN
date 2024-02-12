@@ -1,18 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 type typePage = {
-  onClickPrev: () => void;
-  onClickNext: () => void;
   currentPage: number;
 };
 
-function NavPagination({ onClickPrev, onClickNext, currentPage }: typePage) {
+function NavPagination({ currentPage }: typePage) {
+  const location = useLocation();
+  let disabledLinkPage;
+  if (location.pathname === "/" || location.pathname === "/page/1") {
+    disabledLinkPage = true;
+  }
+
   return (
     <ul className="flex space-x-4 justify-center">
       <li>
         <Link
-          onClick={onClickPrev}
-          className="flex items-center justify-center shrink-0 hover:bg-gray-50  border-2 border-blue-500 cursor-pointer text-base font-bold text-blue-500 w-10 h-10 rounded-lg"
+          className={`linkPagination ${
+            disabledLinkPage ? "opacity-50 cursor-not-allowed" : ""
+          } `}
           to={`/page/${currentPage - 1}`}
         >
           <svg
@@ -34,7 +39,6 @@ function NavPagination({ onClickPrev, onClickNext, currentPage }: typePage) {
 
       <li>
         <Link
-          onClick={onClickNext}
           className="flex items-center justify-center shrink-0 hover:bg-gray-50  border-2 border-blue-500 cursor-pointer text-base font-bold text-blue-500 w-10 h-10 rounded-lg"
           to={`/page/${currentPage + 1}`}
         >

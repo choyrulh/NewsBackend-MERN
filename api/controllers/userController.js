@@ -1,7 +1,8 @@
 const Users = require("../models/userModels");
 const bcrypt = require("bcrypt");
+const catchAsync = require("../utils/catchAsync");
 
-getAllUsers = async (req, res, next) => {
+getAllUsers = catchAsync(async (req, res, next) => {
   const users = await Users.find();
   if (!users) {
     const err = new Error("No users found");
@@ -12,9 +13,9 @@ getAllUsers = async (req, res, next) => {
     results: users.length,
     data: users,
   });
-};
+});
 
-getUser = async (req, res, next) => {
+getUser = catchAsync(async (req, res, next) => {
   const user = await Users.findById(req.params.id);
   if (!user) {
     const err = new Error(`No user found with id: ${req.params.id}`);
@@ -24,27 +25,27 @@ getUser = async (req, res, next) => {
     status: "success",
     data: user,
   });
-};
+});
 
-createUser = async (req, res, next) => {
-  const { name, email, password } = req.body;
+// createUser = async (req, res, next) => {
+//   const { name, email, password } = await req.body;
 
-  // hash the password
-  const hashedPassword = await bcrypt.hash(password, 12);
+//   // hash the password
+//   const hashedPassword = await bcrypt.hash(password, 12);
 
-  const user = await Users.create({
-    name: name,
-    email: email,
-    password: hashedPassword,
-  });
+//   const user = await Users.create({
+//     name: name,
+//     email: email,
+//     password: hashedPassword,
+//   });
 
-  res.status(201).json({
-    status: "success",
-    data: user,
-  });
-};
+//   res.status(201).json({
+//     status: "success",
+//     data: user,
+//   });
+// };
 
-updateUser = async (req, res, next) => {
+updateUser = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -63,18 +64,18 @@ updateUser = async (req, res, next) => {
     status: "success",
     data: updateUser,
   });
-};
+});
 
-deleteUser = async (req, res, next) => {
+deleteUser = catchAsync(async (req, res, next) => {
   await Users.findByIdAndDelete(req.params.id);
 
   res.status(200).json({ status: "success", data: null });
-};
+});
 
 module.exports = {
   getAllUsers,
   getUser,
-  createUser,
+  // createUser,
   updateUser,
   deleteUser,
 };

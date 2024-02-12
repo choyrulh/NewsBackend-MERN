@@ -1,0 +1,163 @@
+const { promisify } = require("util");
+const Users = require("../models/userModels");
+const appError = require("../utils/appError");
+const catchAsync = require("../utils/catchAsync");
+const jwt = require("jsonwebtoken");
+
+const signToken = (id) =>
+  jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+createUser = catchAsync(async (req, res, next) => {
+  const { name, email, password, passwordConfirm, role } = await req.body;
+
+  if (!name || !email || !password || !passwordConfirm) {
+    return next(new appError("Please provide name, email and password", 400));
+  }
+
+  // check if user already exists
+  const existingUser = await Users.findOne({ email });
+
+  if (existingUser) {
+    return next(new appError("User already exists", 400));
+  }
+
+  // hash the password
+  // const hashedPassword = await bcrypt.hash(password, 12);
+
+  const newUser = await Users.create({
+    name: name,
+    email: email,
+    // password: hashedPassword,
+    // passwordConfirm: hashedPassword,
+    password: password,
+    passwordConfirm: passwordConfirm,
+    role: role,
+  });
+
+  const token = signToken(newUser._id);
+
+  res.status(201).json({
+    status: "success",
+    token: token,
+    data: newUser,
+  });
+});
+
+updateUser = catchAsync(async (req, res, next) => {
+  const { name, email, password } = req.body;
+
+  // Your validation logic here
+
+  // let hashedPassword = null;
+  // if (password) {
+  //   hashedPassword = await bcrypt.hash(password, 12);
+  // }
+
+  const updatedUser = await Users.findByIdAndUpdate(
+    req.params.id,
+    {
+      name,
+      email,
+      // password: hashedPassword,
+      password: password,
+    },
+    { new: true, runValidators: true } // Tambahkan opsi runValidators untuk menjalankan validasi schema saat update
+  );
+
+  if (!updatedUser) {
+    return next(new appError("User not found", 404));
+  }
+
+  const token = signToken(updatedUser._id);
+
+  res.status(200).json({
+    message: "User updated successfully",
+    token: token,
+    data: updatedUser,
+  });
+});
+
+loginUser = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // 1 - check if email and password user exists
+  if (!email || !password) {
+    return next(new appError("Please provide email and password", 400));
+  }
+
+  // 2 - check if user exist email and password is correct
+  const user = await Users.findOne({ email }).select("+password");
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new appError("Incorrect email or password", 401));
+  }
+
+  // 3 - if everything ok send token to client
+  const token = signToken(user._id);
+  res.status(200).json({
+    status: "success",
+    token: token,
+  });
+});
+
+// Protect middleware
+protect = catchAsync(async (req, res, next) => {
+  // 1) getting token and check of it's there
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
+  if (!token) {
+    return next(
+      new appError("You are not logged in! Please log in to get access", 401)
+    );
+  }
+
+  // 2) verification  of token
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  console.log(decoded);
+
+  // 3) check if user still exist
+  const currentUser = await Users.findById(decoded.id);
+  if (!currentUser) {
+    return next(
+      new appError("The user belonging to this token does no longer exist", 401)
+    );
+  }
+
+  // 4) check if user changed password after the token was issued
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new appError("User recently changed password! Please log in again", 401)
+    );
+  }
+
+  // grant access to protected route
+  req.user = currentUser;
+
+  next();
+});
+
+restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new appError("You do not have permission to perform this action", 403)
+      );
+    }
+    next();
+  };
+};
+
+module.exports = {
+  createUser,
+  updateUser,
+  loginUser,
+  protect,
+  restrictTo,
+};

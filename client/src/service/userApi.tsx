@@ -8,7 +8,7 @@ type dataType = {
 
 export const postUser = async (data: dataType) => {
   const { data: user } = await axios.post(
-    "http://localhost:3000/api/v1/users",
+    "http://localhost:3000/api/v1/users/signup",
     data
   );
   return user;

@@ -1,6 +1,7 @@
 const express = require("express");
 
 const newsController = require("../controllers/newsController");
+const authController = require("../controllers/authController");
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.route("/query").get(newsController.aliasNews, newsController.getAllNews);
 // GET ALL NEWS
 router
   .route("/")
-  .get(newsController.getAllNews)
+  .get(authController.protect, newsController.getAllNews)
   .post(newsController.createNews);
 
 // GET, DELETE, UPDATE, CREATE SINGLE NEWS

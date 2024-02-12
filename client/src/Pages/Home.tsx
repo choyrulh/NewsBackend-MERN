@@ -21,8 +21,6 @@ function Home() {
     useGetNewsByQueryQuery(debounceSearchTerm);
   const { data: dataPagination } = useGetNewsByPageQuery(id);
 
-  console.log("ini data pagination", dataPagination);
-
   const currentPage = id ? Math.max(2, parseInt(id)) : 1;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +52,7 @@ function Home() {
         onChange={handleChange}
         value={search}
       />
-      <NavPagination
-        onClickPrev={() => {}}
-        onClickNext={() => {}}
-        currentPage={currentPage}
-      />
+      <NavPagination currentPage={currentPage} />
       <Container>
         <Card
           news={news}
