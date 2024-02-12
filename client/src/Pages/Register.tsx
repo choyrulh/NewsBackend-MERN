@@ -9,6 +9,7 @@ type TypeFormUSer = {
   name: string;
   email: string;
   password: string;
+  passwordConfirm: string;
 };
 
 function Register() {
@@ -18,6 +19,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
+    passwordConfirm: "",
   });
 
   const { mutateAsync } = useMutation({
@@ -77,6 +79,12 @@ function Register() {
                 onChange={handleChange("password")}
                 type="password"
                 placeholder="Password"
+                ariaLabel="password"
+              />
+              <InputForm
+                onChange={handleChange("passwordConfirm")}
+                type="password"
+                placeholder="Confirm Password"
                 ariaLabel="password"
               />
               <div className="flex items-center justify-center mt-4">

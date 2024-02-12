@@ -12,7 +12,7 @@ router.route("/").get(userController.getAllUsers);
 router
   .route("/:id")
   .get(authController.restrictTo("admin"), userController.getUser)
-  .put(authController.restrictTo("admin", "user"), userController.updateUser)
+  .put(authController.restrictTo("admin", "user"), authController.updateUser)
   .delete(
     authController.protect,
     authController.restrictTo("admin"),

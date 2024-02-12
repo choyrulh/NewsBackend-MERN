@@ -34,6 +34,10 @@ const Header = () => {
       title: "News",
       link: "/news",
     },
+    {
+      title: "Author",
+      link: "/author",
+    },
   ];
   return (
     <header className="shadow-lg py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] relative">
@@ -84,7 +88,7 @@ const Header = () => {
               to={i.link}
               key={i.title}
               className={({ isActive }) =>
-                isActive ? "text-red-500 navText" : "navText"
+                isActive ? "text-[#007bff] navText" : "navText"
               }
               end
             >

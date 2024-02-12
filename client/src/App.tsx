@@ -9,6 +9,7 @@ import DetailNews from "./Pages/DetailNews";
 import NotFound from "./Pages/NotFound";
 import Login from "./Pages/Login.tsx";
 import Register from "./Pages/Register.tsx";
+import Author from "./Pages/Author.tsx";
 function App() {
   const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ function App() {
         { path: "/about", element: <About /> },
         { path: "/news", element: <News /> },
         { path: "/news/:id", element: <DetailNews /> },
+        { path: "/author", element: <Author /> },
         { path: "/contact", element: <Contact /> },
         { path: "/login", element: <Login /> },
         { path: "/register", element: <Register /> },

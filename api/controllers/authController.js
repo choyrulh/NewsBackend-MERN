@@ -48,13 +48,6 @@ createUser = catchAsync(async (req, res, next) => {
 updateUser = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
 
-  // Your validation logic here
-
-  // let hashedPassword = null;
-  // if (password) {
-  //   hashedPassword = await bcrypt.hash(password, 12);
-  // }
-
   const updatedUser = await Users.findByIdAndUpdate(
     req.params.id,
     {

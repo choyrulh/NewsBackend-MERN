@@ -27,44 +27,26 @@ getUser = catchAsync(async (req, res, next) => {
   });
 });
 
-// createUser = async (req, res, next) => {
-//   const { name, email, password } = await req.body;
+// updateUser = catchAsync(async (req, res, next) => {
+//   const { name, email, password } = req.body;
 
-//   // hash the password
 //   const hashedPassword = await bcrypt.hash(password, 12);
 
-//   const user = await Users.create({
-//     name: name,
-//     email: email,
-//     password: hashedPassword,
-//   });
+//   const updateUser = await Users.findByIdAndUpdate(
+//     req.params.id,
+//     {
+//       name: name,
+//       email: email,
+//       password: hashedPassword,
+//     },
+//     { new: true }
+//   );
 
-//   res.status(201).json({
+//   res.status(200).json({
 //     status: "success",
-//     data: user,
+//     data: updateUser,
 //   });
-// };
-
-updateUser = catchAsync(async (req, res, next) => {
-  const { name, email, password } = req.body;
-
-  const hashedPassword = await bcrypt.hash(password, 12);
-
-  const updateUser = await Users.findByIdAndUpdate(
-    req.params.id,
-    {
-      name: name,
-      email: email,
-      password: hashedPassword,
-    },
-    { new: true }
-  );
-
-  res.status(200).json({
-    status: "success",
-    data: updateUser,
-  });
-});
+// });
 
 deleteUser = catchAsync(async (req, res, next) => {
   await Users.findByIdAndDelete(req.params.id);
@@ -75,7 +57,6 @@ deleteUser = catchAsync(async (req, res, next) => {
 module.exports = {
   getAllUsers,
   getUser,
-  // createUser,
-  updateUser,
+  // updateUser,
   deleteUser,
 };

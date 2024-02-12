@@ -10,7 +10,7 @@ router.route("/query").get(newsController.aliasNews, newsController.getAllNews);
 // GET ALL NEWS
 router
   .route("/")
-  .get(authController.protect, newsController.getAllNews)
+  .get(newsController.getAllNews)
   .post(newsController.createNews);
 
 // GET, DELETE, UPDATE, CREATE SINGLE NEWS

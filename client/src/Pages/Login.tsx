@@ -1,8 +1,41 @@
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputForm from "../components/InputForm";
+import { useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser } from "../service/userApi";
+
+type formUserLogin = {
+  email: string;
+  password: string;
+};
 
 function Login() {
+  const navigate = useNavigate();
+  const inputRef = useRef<formUserLogin>({
+    email: "",
+    password: "",
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data: formUserLogin) => {
+      navigate("/");
+      console.log("submits sukses" + data);
+    },
+  });
+
+  const handleChange =
+    (field: keyof formUserLogin) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      inputRef.current = { ...inputRef.current, [field]: e.target.value };
+    };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutateAsync(inputRef.current);
+  };
+
   return (
     <>
       <div className="min-h-screen flex flex-row items-center justify-center">
@@ -24,9 +57,15 @@ function Login() {
               Login account
             </p>
 
-            <form>
-              <InputForm type="name" placeholder="Name" ariaLabel="Name" />
+            <form className="mt-4" onSubmit={handleSubmit}>
               <InputForm
+                onChange={handleChange("email")}
+                type="email"
+                placeholder="Email"
+                ariaLabel="Email"
+              />
+              <InputForm
+                onChange={handleChange("password")}
                 type="password"
                 placeholder="Password"
                 ariaLabel="password"
@@ -40,7 +79,7 @@ function Login() {
                   Forget Password?
                 </a>
 
-                <Button>Login</Button>
+                <Button type="submit">Login</Button>
               </div>
             </form>
           </div>

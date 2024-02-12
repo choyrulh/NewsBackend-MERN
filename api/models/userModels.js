@@ -53,6 +53,16 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const docToUpdate = this.getUpdate();
+  if (docToUpdate.password) {
+    docToUpdate.password = await bcrypt.hash(docToUpdate.password, 12);
+    docToUpdate.passwordConfirm = undefined;
+    docToUpdate.passwordChangedAt = Date.now();
+  }
+  next();
+});
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
