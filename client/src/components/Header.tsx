@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { useUserLogin } from "../hooks/UserProvider";
+import useUsersLogout from "../hooks/useUsersLogout";
 
 interface navbar {
   title: string;
@@ -7,8 +9,14 @@ interface navbar {
 }
 
 const Header = () => {
+  const { user } = useUserLogin();
+  const { handleLogout } = useUsersLogout();
+
   const location = useLocation();
   const [isMenuCollapsed, setMenuCollapsed] = useState<boolean>(false);
+
+  const role = user?.role;
+  console.log(role);
 
   if (location.pathname === "/login" || location.pathname === "/register") {
     return null;
@@ -53,14 +61,29 @@ const Header = () => {
           />
         </a>
         <div className="flex items-center ml-auto lg:order-1">
-          <button className="mr-6 font-semibold text-[15px] border-none outline-none">
-            <Link to="/login" className="text-[#007bff] hover:underline">
-              Login
-            </Link>
-          </button>
-          <button className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
-            <Link to="/register">Register</Link>
-          </button>
+          {role === "user" ? (
+            <>
+              <button
+                onClick={handleLogout}
+                className="mr-6 font-semibold text-[15px] border-none outline-none"
+              >
+                <Link to="/login" className="text-[#007bff] hover:underline">
+                  Logout
+                </Link>
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="mr-6 font-semibold text-[15px] border-none outline-none">
+                <Link to="/login" className="text-[#007bff] hover:underline">
+                  Login
+                </Link>
+              </button>
+              <button className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
+                <Link to="/register">Register</Link>
+              </button>
+            </>
+          )}
           <button id="toggle" className="lg:hidden ml-7">
             <svg
               className="w-7 h-7"

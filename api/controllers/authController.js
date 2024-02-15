@@ -3,6 +3,7 @@ const Users = require("../models/userModels");
 const appError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
+const cookie = require("cookie");
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -37,6 +38,8 @@ createUser = catchAsync(async (req, res, next) => {
   });
 
   const token = signToken(newUser._id);
+
+  res.cookie("jwt", token, { httpOnly: true, secure: true, maxAge: 3600000 });
 
   res.status(201).json({
     status: "success",
@@ -88,9 +91,47 @@ loginUser = catchAsync(async (req, res, next) => {
 
   // 3 - if everything ok send token to client
   const token = signToken(user._id);
+
+  // 4 - set cookie with the token
+  res.cookie("jwt", token, { httpOnly: true, secure: true, maxAge: 3600000 });
+
   res.status(200).json({
     status: "success",
     token: token,
+  });
+});
+
+// Logout user and clear cookie with httpOnly and secure flags set to true and maxAge set to 0 to expire the cookie immediately after it is set in the browser and sent back to the server.
+logOutUser = (req, res) => {
+  res.cookie("jwt", "", { httpOnly: true, secure: true, maxAge: 0 });
+  res.status(200).json({ status: "success" });
+};
+
+const verifyToken = (req, res, next) => {
+  const header = req.headers.cookie;
+  const token = header.split("=")[1];
+  if (!token) {
+    return next(new appError("Please login first", 401));
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return next(new appError("Please login first", 401));
+    }
+    req.user = decoded;
+    next();
+  });
+};
+
+const getUserLogin = catchAsync(async (req, res, next) => {
+  const user = await Users.findById(req.user.id);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      role: user.role,
+      name: user.name,
+      email: user.email,
+    },
   });
 });
 
@@ -153,4 +194,7 @@ module.exports = {
   loginUser,
   protect,
   restrictTo,
+  getUserLogin,
+  verifyToken,
+  logOutUser,
 };

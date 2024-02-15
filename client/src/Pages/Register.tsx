@@ -4,6 +4,7 @@ import Button from "../components/Button";
 import InputForm from "../components/InputForm";
 import { useMutation } from "@tanstack/react-query";
 import { postUser } from "../service/userApi";
+import { useUserLogin } from "../hooks/UserProvider";
 
 type TypeFormUSer = {
   name: string;
@@ -13,6 +14,7 @@ type TypeFormUSer = {
 };
 
 function Register() {
+  const { setUser } = useUserLogin();
   const navigate = useNavigate();
 
   const inputRef = useRef<TypeFormUSer>({
@@ -22,9 +24,13 @@ function Register() {
     passwordConfirm: "",
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, error } = useMutation({
     mutationFn: postUser,
     onSuccess: (data) => {
+      document.cookie = `jwt=${data.token}; secure; httpOnly; max-age=3600000`;
+
+      setUser(data.data);
+
       navigate("/");
       console.log("submits sukses" + data);
     },
@@ -87,6 +93,9 @@ function Register() {
                 placeholder="Confirm Password"
                 ariaLabel="password"
               />
+              {error && (
+                <p className="text-red-500 mt-1 text-sm">incorrect password</p>
+              )}
               <div className="flex items-center justify-center mt-4">
                 <Button type="submit">Register</Button>
               </div>

@@ -4,6 +4,8 @@ import InputForm from "../components/InputForm";
 import { useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../service/userApi";
+import axios from "axios";
+import { useUserLogin } from "../hooks/UserProvider";
 
 type formUserLogin = {
   email: string;
@@ -11,17 +13,40 @@ type formUserLogin = {
 };
 
 function Login() {
+  const { setUser } = useUserLogin();
   const navigate = useNavigate();
   const inputRef = useRef<formUserLogin>({
     email: "",
     password: "",
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, error } = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data: formUserLogin) => {
-      navigate("/");
-      console.log("submits sukses" + data);
+    onSuccess: async (data) => {
+      const token = JSON.stringify(data.token);
+
+      // Validate token before setting cookie
+      if (typeof token !== "string" || token.length === 0) {
+        console.error("Invalid token received. Security risk!");
+        return;
+      }
+
+      // Set token as cookie with secure and httpOnly flags
+      document.cookie = `jwt=${token}; secure; httpOnly; max-age=3600000`; // 1 hour
+
+      const res = await axios.get(
+        "http://localhost:3000/api/v1/users/login/user"
+      );
+
+      setUser(res.data.data);
+
+      const role = await res.data?.data.role;
+
+      if (role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
     },
   });
 
@@ -70,7 +95,11 @@ function Login() {
                 placeholder="Password"
                 ariaLabel="password"
               />
-
+              {error && (
+                <p className="text-red-500 mt-1 text-sm">
+                  incorrect email or password
+                </p>
+              )}
               <div className="flex items-center justify-between mt-4">
                 <a
                   href="#"
