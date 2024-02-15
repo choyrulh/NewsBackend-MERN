@@ -1,8 +1,5 @@
-import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-
-axios.defaults.withCredentials = true;
 
 interface UserContextType {
   user: unknown;
@@ -21,21 +18,22 @@ export const UserContext = createContext<UserContextType>({
 export const useUserLogin = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<unknown>(() => {
-    const savedUser = Cookies.get("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [user, setUser] = useState<unknown>(null);
 
   useEffect(() => {
-    if (user) {
-      Cookies.set("user", JSON.stringify(user));
-    } else {
-      Cookies.remove("user");
+    const userCookie = Cookies.get("user");
+    if (userCookie) {
+      setUser(JSON.parse(userCookie));
     }
-  }, [user]);
+  }, []);
+
+  const handleSetUser = (user: unknown) => {
+    setUser(user);
+    Cookies.set("user", JSON.stringify(user));
+  };
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser: handleSetUser }}>
       {children}
     </UserContext.Provider>
   );
