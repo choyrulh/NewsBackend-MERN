@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { userAuthType } from "../type/userAuthType";
 
 interface UserContextType {
-  user: unknown;
-  setUser: React.Dispatch<React.SetStateAction<unknown>>;
+  user: userAuthType | null;
+  setUser: (user: userAuthType | null) => void;
 }
 
 type Props = {
@@ -18,7 +19,7 @@ export const UserContext = createContext<UserContextType>({
 export const useUserLogin = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<unknown>(null);
+  const [user, setUser] = useState<userAuthType | null>(null);
 
   useEffect(() => {
     const userCookie = Cookies.get("user");
@@ -27,7 +28,7 @@ export const UserProvider = ({ children }: Props) => {
     }
   }, []);
 
-  const handleSetUser = (user: unknown) => {
+  const handleSetUser = (user: userAuthType | null) => {
     setUser(user);
     Cookies.set("user", JSON.stringify(user));
   };

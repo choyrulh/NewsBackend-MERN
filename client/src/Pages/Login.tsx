@@ -7,6 +7,8 @@ import { loginUser } from "../service/userApi";
 import axios from "axios";
 import { useUserLogin } from "../hooks/UserProvider";
 
+axios.defaults.withCredentials = true;
+
 type formUserLogin = {
   email: string;
   password: string;
@@ -35,7 +37,10 @@ function Login() {
       document.cookie = `jwt=${token}; secure; httpOnly; max-age=3600000`; // 1 hour
 
       const res = await axios.get(
-        "http://localhost:3000/api/v1/users/login/user"
+        "http://localhost:3000/api/v1/users/login/user",
+        {
+          withCredentials: true,
+        }
       );
 
       setUser(res.data.data);

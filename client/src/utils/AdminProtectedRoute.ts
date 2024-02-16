@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import useUserLogin from "../hooks/useUserLogin";
+import { useUserLogin } from "../hooks/UserProvider";
+import { useEffect } from "react";
+// import useUserLogin from "../hooks/useUserLogin";
 
 type Props = {
   children: React.ReactNode;
@@ -10,12 +12,14 @@ export const AdminProtectedRoute = ({ children }: Props) => {
   const { user } = useUserLogin();
   const role = user?.role;
 
+  useEffect(() => {
+    if (role !== "admin") {
+      navigate("/login");
+    }
+  });
   if (role === "admin") {
     return children;
-  } else {
-    // Use navigate instead of redirect
-    navigate("/login");
-    // You can also return a fallback UI or null if needed
-    return null;
   }
+  // Use navigate instead of redirect
+  // You can also return a fallback UI or null if needed
 };
