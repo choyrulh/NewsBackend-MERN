@@ -19,18 +19,26 @@ export const UserContext = createContext<UserContextType>({
 export const useUserLogin = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<userAuthType | null>(null);
+  const [user, setUser] = useState<userAuthType | null>(() => {
+    const userCookie = Cookies.get("user");
+    return userCookie ? JSON.parse(userCookie) : null;
+  });
 
   useEffect(() => {
     const userCookie = Cookies.get("user");
-    if (userCookie) {
+    if (userCookie && !user) {
       setUser(JSON.parse(userCookie));
     }
-  }, []);
+  }, [user]);
 
-  const handleSetUser = (user: userAuthType | null) => {
-    setUser(user);
-    Cookies.set("user", JSON.stringify(user));
+  const handleSetUser = (newUser: userAuthType | null) => {
+    setUser(newUser);
+    // Set or remove the user cookie based on the newUser value
+    if (newUser) {
+      Cookies.set("user", JSON.stringify(newUser));
+    } else {
+      Cookies.remove("user");
+    }
   };
 
   return (

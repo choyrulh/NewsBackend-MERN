@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../service/userApi";
 import axios from "axios";
 import { useUserLogin } from "../hooks/UserProvider";
+import Cookies from "js-cookie";
 
 axios.defaults.withCredentials = true;
 
@@ -34,7 +35,7 @@ function Login() {
       }
 
       // Set token as cookie with secure and httpOnly flags
-      document.cookie = `jwt=${token}; secure; httpOnly; max-age=3600000`; // 1 hour
+      Cookies.set("jwt", token, { secure: true, expires: 1 / 24 }); // 1 hour
 
       const res = await axios.get(
         "http://localhost:3000/api/v1/users/login/user",
@@ -47,11 +48,10 @@ function Login() {
 
       const role = await res.data?.data.role;
 
-      if (role === "admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/");
-      }
+      return role === "admin" ? navigate("/dashboard") : navigate("/");
+    },
+    onError: (err) => {
+      console.log("error ", err);
     },
   });
 

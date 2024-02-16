@@ -63,6 +63,11 @@ const Header = () => {
         <div className="flex items-center ml-auto lg:order-1">
           {role === "user" && (
             <>
+              <button className="mr-6 font-semibold text-[15px] border-none outline-none">
+                <Link to="/profile" className="text-[#007bff] hover:underline">
+                  Profile
+                </Link>
+              </button>
               <button
                 onClick={handleLogout}
                 className="mr-6 font-semibold text-[15px] border-none outline-none"

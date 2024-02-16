@@ -12,7 +12,11 @@ import Register from "./Pages/Register.tsx";
 import Author from "./Pages/Author.tsx";
 import Dashboard from "./Pages/Dashboard.tsx";
 import { UserProvider } from "./hooks/UserProvider.tsx";
-import { AdminProtectedRoute } from "./utils/AdminProtectedRoute.ts";
+import {
+  AdminProtectedRoute,
+  UserProtectedRoute,
+} from "./utils/AuthProtectedRoute.ts";
+import Profile from "./Pages/Profile.tsx";
 function App() {
   const queryClient = new QueryClient();
 
@@ -29,6 +33,14 @@ function App() {
             <AdminProtectedRoute>
               <Dashboard />
             </AdminProtectedRoute>
+          ),
+        },
+        {
+          path: "/profile",
+          element: (
+            <UserProtectedRoute>
+              <Profile />
+            </UserProtectedRoute>
           ),
         },
         { path: "/page/:id", element: <Home /> },
