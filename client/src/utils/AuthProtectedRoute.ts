@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useUserLogin } from "../hooks/UserProvider";
+import { UserLogin } from "../hooks/UserProvider";
 import { useEffect } from "react";
 // import useUserLogin from "../hooks/useUserLogin";
 
@@ -9,7 +9,7 @@ type Props = {
 
 export const AdminProtectedRoute = ({ children }: Props) => {
   const navigate = useNavigate();
-  const { user } = useUserLogin();
+  const { user } = UserLogin();
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
@@ -24,7 +24,7 @@ export const AdminProtectedRoute = ({ children }: Props) => {
 
 export const UserProtectedRoute = ({ children }: Props) => {
   const navigate = useNavigate();
-  const { user } = useUserLogin();
+  const { user } = UserLogin();
   // const role = user?.role;
 
   useEffect(() => {

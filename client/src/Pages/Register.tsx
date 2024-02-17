@@ -4,7 +4,8 @@ import Button from "../components/Button";
 import InputForm from "../components/InputForm";
 import { useMutation } from "@tanstack/react-query";
 import { postUser } from "../service/userApi";
-import { useUserLogin } from "../hooks/UserProvider";
+import { UserLogin } from "../hooks/UserProvider";
+import { AxiosError } from "axios";
 
 type TypeFormUSer = {
   name: string;
@@ -14,7 +15,7 @@ type TypeFormUSer = {
 };
 
 function Register() {
-  const { setUser } = useUserLogin();
+  const { setUser } = UserLogin();
   const navigate = useNavigate();
 
   const inputRef = useRef<TypeFormUSer>({
@@ -35,6 +36,11 @@ function Register() {
       console.log("submits sukses" + data);
     },
   });
+
+  const errorMessage =
+    error instanceof AxiosError
+      ? error?.response?.data.message
+      : error?.message;
 
   const handleChange =
     (field: keyof TypeFormUSer) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +100,7 @@ function Register() {
                 ariaLabel="password"
               />
               {error && (
-                <p className="text-red-500 mt-1 text-sm">incorrect password</p>
+                <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>
               )}
               <div className="flex items-center justify-center mt-4">
                 <Button type="submit">Register</Button>

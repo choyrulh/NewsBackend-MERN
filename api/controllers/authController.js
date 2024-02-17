@@ -5,11 +5,13 @@ const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
 const cookie = require("cookie");
 
+// Sign token and send it to client with cookie with httpOnly and secure flags set to true
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
+// Create or Register User and send token to client
 createUser = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm, role } = await req.body;
 
@@ -24,14 +26,11 @@ createUser = catchAsync(async (req, res, next) => {
     return next(new appError("User already exists", 400));
   }
 
-  // hash the password
-  // const hashedPassword = await bcrypt.hash(password, 12);
-
+  // if user does not exist, create a new user
   const newUser = await Users.create({
     name: name,
     email: email,
-    // password: hashedPassword,
-    // passwordConfirm: hashedPassword,
+
     password: password,
     passwordConfirm: passwordConfirm,
     role: role,
@@ -48,6 +47,7 @@ createUser = catchAsync(async (req, res, next) => {
   });
 });
 
+// Update user by id and return updated user with token and cookie with secure and httpOnly flags set to true and maxAge set to 3600000 to expire the cookie after 1 hour after it is set in the browser and sent back to the server
 updateUser = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
 
@@ -107,6 +107,7 @@ logOutUser = (req, res) => {
   res.status(200).json({ status: "success" });
 };
 
+// Verify token and get user id from it to populate req.user in protected routes and other middleware
 const verifyToken = (req, res, next) => {
   const header = req.headers.cookie;
   const token = header.split("=")[1];
@@ -135,7 +136,7 @@ const getUserLogin = catchAsync(async (req, res, next) => {
   });
 });
 
-// Protect middleware
+// Protect middleware - only for logged in users to access the route
 protect = catchAsync(async (req, res, next) => {
   // 1) getting token and check of it's there
   let token;
@@ -177,6 +178,7 @@ protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+// Restrict middleware - only for logged in users to access the route
 restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

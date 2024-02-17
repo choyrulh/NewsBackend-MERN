@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../service/userApi";
 import axios from "axios";
-import { useUserLogin } from "../hooks/UserProvider";
+import { UserLogin } from "../hooks/UserProvider";
 import Cookies from "js-cookie";
 
 axios.defaults.withCredentials = true;
@@ -16,7 +16,7 @@ type formUserLogin = {
 };
 
 function Login() {
-  const { setUser } = useUserLogin();
+  const { setUser } = UserLogin();
   const navigate = useNavigate();
   const inputRef = useRef<formUserLogin>({
     email: "",

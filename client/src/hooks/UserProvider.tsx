@@ -16,7 +16,7 @@ export const UserContext = createContext<UserContextType>({
   setUser: () => {},
 });
 
-export const useUserLogin = () => useContext(UserContext);
+export const UserLogin = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: Props) => {
   const [user, setUser] = useState<userAuthType | null>(() => {

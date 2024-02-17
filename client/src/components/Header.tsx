@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useUserLogin } from "../hooks/UserProvider";
+import { UserLogin } from "../hooks/UserProvider";
 import useUsersLogout from "../hooks/useUsersLogout";
 
 interface navbar {
@@ -9,7 +9,7 @@ interface navbar {
 }
 
 const Header = () => {
-  const { user } = useUserLogin();
+  const { user } = UserLogin();
   const { handleLogout } = useUsersLogout();
 
   const location = useLocation();
