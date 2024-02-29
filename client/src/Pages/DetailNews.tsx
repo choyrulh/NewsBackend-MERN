@@ -62,7 +62,7 @@ function DetailNews() {
       {/* Tags */}
       <p className="text-gray-500">
         Tags:{" "}
-        {data.tag.map((tag) => {
+        {data.tag.map((tag: string) => {
           return tag.replace(/['"]+/g, "");
         })}
       </p>

@@ -13,17 +13,16 @@ const Header = () => {
   const { handleLogout } = useUsersLogout();
 
   const location = useLocation();
-  const [isMenuCollapsed, setMenuCollapsed] = useState<boolean>(false);
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState<boolean>(false);
 
   const role = user?.role;
-  console.log(role);
 
   if (location.pathname === "/login" || location.pathname === "/register") {
     return null;
   }
 
   const handleClick = () => {
-    setMenuCollapsed(!isMenuCollapsed);
+    setIsMenuCollapsed(!isMenuCollapsed);
   };
   const navLinks: navbar[] = [
     {
@@ -110,7 +109,7 @@ const Header = () => {
               </button>
             </>
           )}
-          <button id="toggle" className="lg:hidden ml-7">
+          <button onClick={handleClick} id="toggle" className="lg:hidden ml-7">
             <svg
               className="w-7 h-7"
               fill="#333"
@@ -127,9 +126,8 @@ const Header = () => {
         </div>
 
         <ul
-          onClick={handleClick}
           id="collapseMenu"
-          style={{ display: isMenuCollapsed ? "block" : "hidden" }}
+          style={{ display: isMenuCollapsed ? "none" : "block" }}
           className="lg:!flex lg:space-x-5 max-lg:space-y-2 max-lg:hidden max-lg:py-4 max-lg:w-full"
         >
           {navLinks.map((i: navbar) => (

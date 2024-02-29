@@ -6,7 +6,13 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 
 // GET ALL USERS
-router.route("/").get(userController.getAllUsers);
+router
+  .route("/")
+  .get(
+    authController.protect,
+    authController.restrictTo("admin"),
+    userController.getAllUsers
+  );
 
 // GET, DELETE, UPDATE SINGLE USER
 router

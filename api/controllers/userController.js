@@ -1,5 +1,4 @@
 const Users = require("../models/userModels");
-const bcrypt = require("bcrypt");
 const catchAsync = require("../utils/catchAsync");
 
 getAllUsers = catchAsync(async (req, res, next) => {

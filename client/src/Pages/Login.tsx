@@ -50,9 +50,6 @@ function Login() {
 
       return role === "admin" ? navigate("/dashboard") : navigate("/");
     },
-    onError: (err) => {
-      console.log("error ", err);
-    },
   });
 
   const handleChange =
